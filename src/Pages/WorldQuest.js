@@ -10,7 +10,7 @@ function Api() {
   // Fetch countries data on initial load
   useEffect(() => {
     axios
-      .get('https://restcountries.com/v3.1/all')
+      .get('https://restcountries.com/v3.1/all?limit=100')
       .then((response) => setCountries(response.data))
       .catch((error) => console.error(error));
   }, []);
