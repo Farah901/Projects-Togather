@@ -7,12 +7,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Calculator from './Pages/Calculator'
 import WorldQuest from './Pages/WorldQuest'
 import TodoApp from './Pages/TodoApp'
-
-
+import LangProvider from './Pages/langContext'
+import ThemeProvider from "./Pages/ThemeContext";
 
 export default function App() {
   return (
     <>
+    <LangProvider>    
+    <ThemeProvider>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profiles" element={<Profiles />} />
@@ -20,7 +22,8 @@ export default function App() {
         <Route path="/world-flags" element={<WorldQuest />} />
         <Route path="/todo-app" element={<TodoApp />} />
         <Route path="*" element={<NotFound />} />
-      </Routes>
+      </Routes></ThemeProvider>
+      </LangProvider>
     </>
   );
 }

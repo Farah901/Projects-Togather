@@ -5,14 +5,25 @@ import NavBar from '../Components/NavBar';
 function Api() {
   const [countries, setCountries] = useState([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const itemsPerPage = 10;
 
   // Fetch countries data on initial load
   useEffect(() => {
+    setLoading(true);
+    setError(false);
     axios
-      .get('https://restcountries.com/v3.1/all?limit=100')
-      .then((response) => setCountries(response.data))
-      .catch((error) => console.error(error));
+      .get('https://restcountries.com/v2/all') // Using v2 API endpoint
+      .then((response) => {
+        setCountries(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(true);
+        setLoading(false);
+      });
   }, []);
 
   // Calculate the data for the current page
@@ -24,52 +35,54 @@ function Api() {
 
   // Handlers for pagination buttons
   const handlePreviousPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
+    if (page > 1) setPage(page - 1);
   };
 
   const handleNextPage = () => {
-    if (page < totalPages) {
-      setPage(page + 1);
-    }
+    if (page < totalPages) setPage(page + 1);
   };
 
   return (
     <>
-    <NavBar />
+      <NavBar />
       <div className="api-app-container">
-        <div className="api-country-list">
-          {currentCountries.map((country) => (
-            <div key={country.cca3} className="api-country-card">
-              <h2>{country.name.common}</h2>
-              <strong>Region: </strong>{country.continents && country.continents[0]} <br />
-              <strong>Capital: </strong>{country.capital && country.capital[0]} <br />
+        {loading && <p>Loading data...</p>}
+        {error && <p>Failed to fetch data. Please try again later.</p>}
 
-              <img
-                src={country.flags.png}
-                alt={`${country.name.common} flag`}
-                className="api-flag-image"
-              />
+        {!loading && !error && (
+          <>
+            <div className="api-country-list">
+              {currentCountries.map((country, index) => (
+                <article key={country.alpha3Code || index} className="api-country-card">
+                  <img
+                    src={country.flag}
+                    alt={`Flag of ${country.name}`}
+                    className="api-flag-image"
+                  />
+                  <h2>{country.name}</h2>
+                  <p><strong>Region: </strong>{country.region || 'N/A'}</p>
+                  <p><strong>Capital: </strong>{country.capital || 'N/A'}</p>
+                  
+                </article>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="api-pagination">
-          <button className="api-pagination-button" onClick={handlePreviousPage} disabled={page === 1}>
-            Previous
-          </button>
-          <span className="api-pagination-text">
-            Page {page} of {totalPages}
-          </span>
-          <button className="api-pagination-button" onClick={handleNextPage} disabled={page === totalPages}>
-            Next
-          </button>
-        </div>
+            <div className="api-pagination">
+              <button className="api-pagination-button" onClick={handlePreviousPage} disabled={page === 1}>
+                Previous
+              </button>
+              <span className="api-pagination-text">
+                Page {page} of {totalPages}
+              </span>
+              <button className="api-pagination-button" onClick={handleNextPage} disabled={page === totalPages}>
+                Next
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       <style>
         {`
-          /* Container Styling */
           .api-app-container {
             font-family: Arial, sans-serif;
             max-width: 1200px;
@@ -78,7 +91,6 @@ function Api() {
             background-color: #f4f4f9;
           }
 
-          /* Title Styling */
           .api-title {
             text-align: center;
             font-size: 2.5rem;
@@ -86,7 +98,6 @@ function Api() {
             margin-bottom: 20px;
           }
 
-          /* Country Cards Container */
           .api-country-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -94,12 +105,11 @@ function Api() {
             margin-bottom: 20px;
           }
 
-          /* Individual Country Card Styling */
           .api-country-card {
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 15px;
+            padding: 10px;
             text-align: center;
             transition: transform 0.3s ease;
           }
@@ -108,7 +118,6 @@ function Api() {
             transform: scale(1.05);
           }
 
-          /* Flag Image Styling */
           .api-flag-image {
             width: 100%;
             height: auto;
@@ -116,7 +125,6 @@ function Api() {
             margin-top: 10px;
           }
 
-          /* Pagination Styling */
           .api-pagination {
             text-align: center;
             margin-top: 30px;

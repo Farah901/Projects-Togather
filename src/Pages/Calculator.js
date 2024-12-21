@@ -45,7 +45,6 @@ const App = () => {
   return (
     <>
       <NavBar />
-      <h1 className="text-center">Calculator</h1>
       <div className="calculator-container">
         <div className="calculator">
           <div className="display">{input || "0"}</div>
@@ -139,8 +138,8 @@ const App = () => {
 
           /* Button Hover Effect */
           .btn:hover:not(.empty) {
-            background: #f1f1f1;
-            color: black;
+          background:#fff;
+            opacity:0.8;
           }
 
           /* Special Styling for Equal Button (spanning two columns) */
@@ -148,6 +147,10 @@ const App = () => {
             background: #05a389;
             color: #fff;
             grid-column: span 2;
+          }
+            .btn:nth-last-child(2) {
+            background: red;
+            color: #fff;
           }
 
           .btn:nth-last-child(1):active {

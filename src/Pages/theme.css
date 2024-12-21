@@ -1,0 +1,11 @@
+.dark{
+    background-color: rgb(12, 10, 10);
+    color: white;
+}
+.light{
+    color: black;
+    background-color: white;
+}
+nav{
+    box-shadow: 2px 2px 5px rgba(80, 55, 55, 0.459);
+}

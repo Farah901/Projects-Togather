@@ -1,149 +1,74 @@
-import React, { Component } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import LangComponent from "../Pages/LangComponent";
+import "bootstrap/dist/css/bootstrap.min.css";
+import ThemeToggler from "../Pages/ThemeToggler";
+import { ThemeContext } from "../Pages/ThemeContext";
 
-export default class NavBar extends Component {
-  state = {
-    isMenuOpen: false, // Toggle state for the menu
+const NavBar = () => {
+  const { theme } = useContext(ThemeContext); // Access theme from context
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for menu toggle
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
-  toggleMenu = () => {
-    this.setState({ isMenuOpen: !this.state.isMenuOpen });
-  };
+  return (
+    <nav className={`navbar navbar-expand-lg ${theme === "dark" ? "navbar-dark" : "navbar-light"}`}>
+      <div className="container-fluid">
+        {/* Navbar Brand */}
+        <Link className="navbar-brand" to="/">
+          MyApp
+        </Link>
 
-  render() {
-    return (
-      <div>
-        <style>
-          {`
-            body {
-              font-family: Arial, sans-serif;
-              margin: 0;
-              padding: 0;
-              background-color: #f4f4f4;
-            }
+        {/* Hamburger Menu */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={toggleMenu}
+          aria-controls="navbarNav"
+          aria-expanded={isMenuOpen}
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-            /* Navbar Container */
-            .navbar {
-              background-color: #333;
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              padding: 10px 20px;
-              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
-
-            /* Navbar Brand */
-            .navbar-brand {
-              color: white;
-              font-size: 24px;
-              text-decoration: none;
-            }
-
-            /* Navbar Links */
-            .nav-links {
-              list-style-type: none;
-              display: flex;
-              margin: 0;
-              padding: 0;
-            }
-
-            .nav-links li {
-              margin: 0 15px;
-            }
-
-            .nav-links a {
-              color: white;
-              text-decoration: none;
-              font-size: 18px;
-              padding: 10px 15px;
-              border-radius: 5px;
-              transition: background-color 0.3s, color 0.3s;
-            }
-
-            .nav-links a:hover {
-              background-color: #555;
-              color: #fff;
-            }
-
-            .nav-links a.active {
-              background-color: #007bff;
-              color: white;
-            }
-
-            /* Hamburger Menu Icon */
-            .hamburger {
-              display: none;
-              flex-direction: column;
-              cursor: pointer;
-            }
-
-            .hamburger span {
-              background-color: white;
-              height: 3px;
-              width: 25px;
-              margin: 3px 0;
-              transition: all 0.3s ease;
-            }
-
-            /* Mobile Menu */
-            @media (max-width: 768px) {
-              .hamburger {
-                display: flex;
-              }
-
-              .nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                background-color: #333;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                padding: 10px 0;
-              }
-
-              .nav-links.open {
-                display: flex;
-              }
-
-              .nav-links li {
-                text-align: center;
-                margin: 10px 0;
-              }
-            }
-          `}
-        </style>
-
-        {/* Navbar */}
-        <nav className="navbar justify-content-center">
-
-          {/* Hamburger Menu */}
-          <div className="hamburger" onClick={this.toggleMenu}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-
-          {/* Navigation Links */}
-          <ul className={`nav-links ${this.state.isMenuOpen ? "open" : ""}`}>
-            <li>
-              <Link to="/">Home</Link>
+        {/* Navbar Links */}
+        <div className={`collapse navbar-collapse ${isMenuOpen ? "show" : ""}`} id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                Home
+              </Link>
             </li>
-            <li>
-              <Link to="/profiles">Profiles</Link>
+            <li className="nav-item">
+              <Link className="nav-link" to="/profiles">
+                Profiles
+              </Link>
             </li>
-            <li>
-              <Link to="/calculator">Calculator</Link>
+            <li className="nav-item">
+              <Link className="nav-link" to="/calculator">
+                Calculator
+              </Link>
             </li>
-            <li>
-              <Link to="/world-flags">World Geography</Link>
+            <li className="nav-item">
+              <Link className="nav-link" to="/world-flags">
+                World Geography
+              </Link>
             </li>
-            <li>
-              <Link to="/todo-app">DoneDeal</Link>
+            <li className="nav-item">
+              <Link className="nav-link" to="/todo-app">
+                DoneDeal
+              </Link>
             </li>
           </ul>
-        </nav>
+          {/* Language Component */}
+          <LangComponent />
+          <ThemeToggler />
+        </div>
       </div>
-    );
-  }
-}
+    </nav>
+  );
+};
+
+export default NavBar;

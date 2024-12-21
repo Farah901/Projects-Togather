@@ -70,7 +70,6 @@ function DoneDeal() {
 
   const filteredTasks = tasks.filter(
     (task) =>
-      task.title.toLowerCase().includes(search.toLowerCase()) &&
       (statusFilter ? task.status === statusFilter : true)
   );
 
@@ -79,7 +78,7 @@ function DoneDeal() {
     <NavBar/>
       <div className="done-deal-app">
         <nav>
-          <img src={logo} alt="Logo" />
+          <img className="logo-app" src={logo} alt="Logo" />
         </nav>
         <div className="done-deal-input-container">
           <input
@@ -196,7 +195,7 @@ function DoneDeal() {
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
           }
 
-          img {
+          logo-app {
             width: 250px;
             height: 150px;
             margin-left: 35%;
